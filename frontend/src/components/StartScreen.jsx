@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API = 'https://cars-5dow.onrender.com';
 
 export default function StartScreen({ sendMessage, connected }) {
   const [tab, setTab]             = useState('create'); // 'create' | 'join'
