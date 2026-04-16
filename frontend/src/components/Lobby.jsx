@@ -174,14 +174,17 @@ export default function Lobby({ sendMessage }) {
   const visibleTrackIds = MODE_TRACKS[effectiveMode] ?? MODE_TRACKS.race;
   const visibleTracks   = Object.values(TRACKS).filter((t) => visibleTrackIds.includes(t.id));
 
-  // Non-host players are auto-readied as soon as they land in the lobby
+  // Non-host players are auto-readied once the host is confirmed.
+  // We wait for hostId to be non-null so we don't fire before the
+  // server's room_update arrives (which would make the host look like
+  // a non-host and auto-ready them, instantly starting the game).
   useEffect(() => {
-    if (!isHost && !hasReadied) {
+    if (hostId && !isHost && !hasReadied) {
       sendMessage({ type: 'ready' });
       setHasReadied(true);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHost]);
+  }, [hostId, isHost]);
 
   const handleReady = () => {
     if (hasReadied) return;
